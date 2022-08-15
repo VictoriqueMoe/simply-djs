@@ -3,8 +3,6 @@ import {
 	ButtonBuilder,
 	ButtonStyle,
 	Client,
-	ComponentBuilder,
-	MessageActionRowComponent,
 	MessageActionRowComponentBuilder,
 	Role,
 	TextChannel
@@ -221,14 +219,14 @@ export async function betterBtnRole(
 							});
 					}
 
-					const rowgap = msg.components[msg.components.length - 1].components;
+					// const rowgap = msg.components[msg.components.length - 1].components;
+					const rowgap: ButtonBuilder[] = [];
 					if (rowgap.length < 5) {
 						if (!emoji) {
 							const btn = new ButtonBuilder()
 								.setLabel(label)
 								.setStyle(color)
 								.setCustomId('role-' + role.id);
-
 							rowgap.push(btn);
 
 							await msg
@@ -240,7 +238,7 @@ export async function betterBtnRole(
 								.then(async (m) => {
 									const link = new ButtonBuilder()
 										.setLabel('View Message')
-										.setStyle('LINK')
+										.setStyle(ButtonStyle.Link)
 										.setURL(m.url);
 
 									const rowew =
@@ -257,10 +255,10 @@ export async function betterBtnRole(
 								.catch((err) => {
 									interaction.followUp({ content: `\`${err.stack}\`` });
 								});
-						} else if (emoji && emoji !== null) {
+						} else if (emoji) {
 							const btn = new ButtonBuilder()
 								.setLabel(label)
-								.setStyle(color as ButtonBuilderStyle)
+								.setStyle(color)
 								.setCustomId('role-' + role.id)
 								.setEmoji(emoji);
 
@@ -275,7 +273,7 @@ export async function betterBtnRole(
 								.then(async (m) => {
 									const link = new ButtonBuilder()
 										.setLabel('View Message')
-										.setStyle('LINK')
+										.setStyle(ButtonStyle.Link)
 										.setURL(m.url);
 
 									const rowew =
@@ -293,17 +291,22 @@ export async function betterBtnRole(
 									interaction.followUp({ content: `\`${err.stack}\`` });
 								});
 						}
-					} else if (rowgap.length === 5) {
-						if (!emoji || emoji === null) {
+					} else if (
+						rowgap.length +
+							msg.components[msg.components.length - 1].components.length ===
+						5
+					) {
+						if (!emoji) {
 							const btn = new ButtonBuilder()
 								.setLabel(label)
-								.setStyle(color as ButtonBuilderStyle)
+								.setStyle(color)
 								.setCustomId('role-' + role.id);
 
-							const rowe = new ActionRowBuilder<ButtonBuilder>().addComponents([
-								btn
-							]);
-
+							const rowe =
+								new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(
+									[btn]
+								);
+							// the fuck do i do here?
 							msg.components.push(rowe);
 
 							await msg
