@@ -1,4 +1,8 @@
-import { CommandInteraction, GuildMember, UserMention } from 'discord.js';
+import {
+	ChatInputCommandInteraction,
+	GuildMember,
+	UserMention
+} from 'discord.js';
 
 /**
  * A class extension of the CommandInteraction object of the disocrd.js framework
@@ -10,7 +14,7 @@ import { CommandInteraction, GuildMember, UserMention } from 'discord.js';
  * @returns {ExtendedInteraction}
  */
 
-export interface ExtendedInteraction extends CommandInteraction {
+export interface ExtendedInteraction extends ChatInputCommandInteraction {
 	mentions: UserMention;
 	member: GuildMember;
 	customId: string;
